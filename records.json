@@ -1,0 +1,48 @@
+[
+  {
+    "id": "e580f9ac-77f7-4bc8-8f4f-63f9be4518d2",
+    "type": "max",
+    "name": "すぐる",
+    "date": "2026-05-07",
+    "createdAt": 1778112000000,
+    "reps": 34,
+    "memo": "初回測定"
+  },
+  {
+    "id": "b2b83b67-7716-4e76-b65e-4481a51bfa68",
+    "type": "max",
+    "name": "ミーツ",
+    "date": "2026-05-07",
+    "createdAt": 1778112000001,
+    "reps": 16,
+    "memo": "初回測定"
+  },
+  {
+    "id": "3ebcfb82-a5ff-4242-87ef-954a8be06eba",
+    "type": "max",
+    "name": "みほ",
+    "date": "2026-05-07",
+    "createdAt": 1778112000002,
+    "reps": 7,
+    "memo": "初回測定"
+  },
+  {
+    "id": "9194265c-4669-4466-a075-b3ab9c83a368",
+    "type": "max",
+    "name": "のり",
+    "date": "2026-05-07",
+    "createdAt": 1780717639579,
+    "memo": "",
+    "reps": 18
+  },
+  {
+    "id": "1780717075141-51b3977753bc78",
+    "type": "training",
+    "name": "すぐる",
+    "date": "2026-06-06",
+    "createdAt": 1780717075141,
+    "totalReps": 30,
+    "practiceMax": 10,
+    "memo": ""
+  }
+]

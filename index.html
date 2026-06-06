@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>懸垂バトル管理</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Pull-up Battle Log</p>
+          <h1>懸垂バトル管理</h1>
+          <p class="lead">消防同級生4人のMAX測定、ハンデ込みスコア、日々の練習量を静かに記録する。</p>
+        </div>
+        <div class="countdown-grid" aria-label="測定日">
+          <div class="deadline">
+            <span>中間測定</span>
+            <strong>2026.06.09</strong>
+            <small>最下位はジュース</small>
+          </div>
+          <div class="deadline final">
+            <span>最終測定</span>
+            <strong>2026.08.10</strong>
+            <small>最下位は豪華ランチ</small>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section class="summary-strip" id="summaryStrip" aria-label="全体サマリー"></section>
+
+        <nav class="quick-nav" aria-label="表示切替">
+          <a href="#rankingSection">ランキング</a>
+          <a href="#trendSection">MAX推移</a>
+          <a href="#trainingSection">練習量</a>
+          <a href="#historySection">履歴</a>
+        </nav>
+
+        <section class="layout-grid">
+          <form class="record-form panel" id="recordForm">
+            <div class="panel-heading">
+              <div>
+                <p class="section-kicker">Record</p>
+                <h2>記録入力</h2>
+              </div>
+              <button type="button" class="ghost-button" id="resetButton">初期化</button>
+            </div>
+
+            <label>
+              <span>名前</span>
+              <select id="nameInput" required></select>
+            </label>
+
+            <label>
+              <span>日付</span>
+              <input id="dateInput" type="date" required />
+            </label>
+
+            <label>
+              <span>記録タイプ</span>
+              <select id="typeInput" required>
+                <option value="max">MAX測定</option>
+                <option value="training">練習ログ</option>
+              </select>
+            </label>
+
+            <div class="field-group" id="maxFields">
+              <label>
+                <span>MAX回数</span>
+                <input id="repsInput" type="number" min="0" step="1" inputmode="numeric" />
+              </label>
+            </div>
+
+            <div class="field-group hidden" id="trainingFields">
+              <label>
+                <span>本日の総懸垂数</span>
+                <input id="totalInput" type="number" min="0" step="1" inputmode="numeric" />
+              </label>
+              <label>
+                <span>今日のMAX（練習）</span>
+                <input id="practiceMaxInput" type="number" min="0" step="1" inputmode="numeric" />
+              </label>
+            </div>
+
+            <label>
+              <span>メモ</span>
+              <textarea id="memoInput" rows="3" placeholder="フォーム、体調、練習メニュー、勝負前コメントなど"></textarea>
+            </label>
+
+            <button class="primary-button" type="submit">記録を追加</button>
+            <p class="storage-note" id="syncStatus">共有状態を確認中...</p>
+          </form>
+
+          <section class="panel" id="rankingSection">
+            <div class="panel-heading">
+              <div>
+                <p class="section-kicker">Ranking</p>
+                <h2>最新ランキング</h2>
+              </div>
+            </div>
+            <div class="tabs" role="tablist" aria-label="ランキング種類">
+              <button class="tab" data-ranking="actual">実回数</button>
+              <button class="tab active" data-ranking="score">ハンデ込み</button>
+              <button class="tab" data-ranking="growth">成長回数</button>
+              <button class="tab" data-ranking="rate">成長率</button>
+            </div>
+            <p class="section-help">下のタブで「何のランキングを見るか」を切り替えます。</p>
+            <ol class="ranking-list" id="rankingList"></ol>
+          </section>
+        </section>
+
+        <section class="panel" id="memberSection">
+          <div class="panel-heading">
+            <div>
+              <p class="section-kicker">Members</p>
+              <h2>個人別カード</h2>
+            </div>
+          </div>
+          <div class="member-grid" id="memberGrid"></div>
+        </section>
+
+        <section class="chart-grid">
+          <div class="chart-panel panel">
+            <div class="panel-heading">
+              <div>
+                <p class="section-kicker">Actual</p>
+                <h2>最新の実回数</h2>
+              </div>
+            </div>
+            <canvas id="actualChart"></canvas>
+          </div>
+          <div class="chart-panel panel">
+            <div class="panel-heading">
+              <div>
+                <p class="section-kicker">Handicap</p>
+                <h2>ハンデ込みスコア</h2>
+              </div>
+            </div>
+            <canvas id="scoreChart"></canvas>
+          </div>
+          <div class="chart-panel wide panel" id="trendSection">
+            <div class="panel-heading">
+              <div>
+                <p class="section-kicker">Trend</p>
+                <h2>今のMAX推移</h2>
+              </div>
+            </div>
+            <canvas id="trendChart"></canvas>
+          </div>
+          <div class="chart-panel wide panel" id="trainingSection">
+            <div class="panel-heading">
+              <div>
+                <p class="section-kicker">Training</p>
+                <h2>日別の練習量</h2>
+              </div>
+            </div>
+            <canvas id="trainingChart"></canvas>
+          </div>
+        </section>
+
+        <section class="panel history-panel" id="historySection">
+          <div class="panel-heading">
+            <div>
+              <p class="section-kicker">History</p>
+              <h2>記録履歴</h2>
+            </div>
+          </div>
+          <div class="history-list" id="historyList"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
