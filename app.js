@@ -36,7 +36,7 @@ const els = {
 
 init();
 
-function init() {
+async function init() {
   els.nameInput.innerHTML = members.map((member) => `<option value="${member.name}">${member.name}</option>`).join("");
   els.dateInput.value = todayString();
   els.repsInput.required = true;
@@ -51,6 +51,22 @@ function init() {
       renderRanking();
     });
   });
+
+  // Fetch from server first if API is available
+  if (API_URL) {
+    try {
+      const response = await fetch(API_URL, { cache: "no-store" });
+      if (response.ok) {
+        const data = await response.json();
+        if (Array.isArray(data.records)) {
+          records = data.records.map(normalizeRecord);
+        }
+      }
+    } catch (e) {
+      // Fall back to localStorage/defaults
+    }
+  }
+
   render();
   startSharedSync();
 }
